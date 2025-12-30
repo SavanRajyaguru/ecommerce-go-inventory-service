@@ -1,0 +1,22 @@
+# Dockerfile.dev - FOR DEVELOPMENT ONLY (Hot Reload with Air)
+FROM golang:1.23-alpine
+
+# Set GOTOOLCHAIN to auto so it can download required Go version
+ENV GOTOOLCHAIN=auto
+
+# Install Air for hot reload
+RUN go install github.com/air-verse/air@latest
+
+# Install wget for healthcheck
+RUN apk add --no-cache wget
+
+WORKDIR /app
+
+# Note: Source code will be mounted as volume at runtime
+# Dependencies will be downloaded when container starts
+
+# Expose port
+EXPOSE 8080
+
+# Run with Air for hot reload
+CMD ["air", "-c", ".air.toml"]
